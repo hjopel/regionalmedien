@@ -1,6 +1,4 @@
-# Welcome to Remix!
-
-- [Remix Docs](https://remix.run/docs)
+# Welcome to my interview app!
 
 ## Development
 
@@ -9,9 +7,6 @@ From your terminal:
 ```sh
 npm run dev
 ```
-
-This starts your app in development mode, rebuilding assets on file changes.
-
 ## Considerations
 
 Pagination + sorting together works as designed. Once a new search is performed, the pagination is reset to the first page & the sorting is reset to the default.
