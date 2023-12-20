@@ -65,6 +65,7 @@ const Pagination = ({ page, length, sort, sortOrder, q }: IPaginationProps) => {
           className={`px-2 py-1 mx-1 rounded ${
             p === currentPage ? "bg-gray-800 text-white" : "bg-gray-300"
           }`}
+          disabled={p === "..."}
           type="button"
           id={`page-${p}`}
           aria-label={`Page ${p}`}

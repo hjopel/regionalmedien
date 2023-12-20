@@ -1,24 +1,13 @@
-import { LinksFunction, json } from "@remix-run/node";
+import { LinksFunction } from "@remix-run/node";
 import {
-  Form,
   Links,
   LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useLoaderData,
-  useSubmit,
 } from "@remix-run/react";
-import {
-  BiSortAlt2,
-  BiLinkExternal,
-  BiCalendar,
-  BiDownArrowAlt,
-  BiUpArrowAlt,
-} from "react-icons/bi"; // Added BiLinkExternal icon
 import stylesheet from "./globals.css";
-import { useRef, useState, forwardRef, ForwardedRef } from "react";
 
 export const links: LinksFunction = () => [
   { rel: "stylesheet", href: stylesheet },
