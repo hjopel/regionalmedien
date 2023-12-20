@@ -1,7 +1,6 @@
 import { json } from "@remix-run/node";
 import { Form, Link, useLoaderData, useSubmit } from "@remix-run/react";
 import { BiLinkExternal, BiDownArrowAlt, BiUpArrowAlt } from "react-icons/bi";
-import { useRef, forwardRef, ForwardedRef } from "react";
 
 interface IArticle {
   imageUrl: string;
