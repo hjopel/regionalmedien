@@ -1,24 +1,7 @@
-import { LinksFunction, json } from "@remix-run/node";
-import {
-  Form,
-  Links,
-  LiveReload,
-  Meta,
-  Outlet,
-  Scripts,
-  ScrollRestoration,
-  useLoaderData,
-  useSubmit,
-} from "@remix-run/react";
-import {
-  BiSortAlt2,
-  BiLinkExternal,
-  BiCalendar,
-  BiDownArrowAlt,
-  BiUpArrowAlt,
-} from "react-icons/bi"; // Added BiLinkExternal icon
-import stylesheet from "./globals.css";
-import { useRef, useState, forwardRef, ForwardedRef } from "react";
+import { json } from "@remix-run/node";
+import { Form, Link, useLoaderData, useSubmit } from "@remix-run/react";
+import { BiLinkExternal, BiDownArrowAlt, BiUpArrowAlt } from "react-icons/bi";
+import { useRef, forwardRef, ForwardedRef } from "react";
 
 interface IArticle {
   imageUrl: string;
@@ -47,61 +30,55 @@ interface IPaginationProps {
   q: string;
 }
 
-const Pagination = forwardRef(
-  (
-    { page, length, sort, sortOrder, q }: IPaginationProps,
-    ref: ForwardedRef<HTMLButtonElement>
-  ) => {
-    const submit = useSubmit();
-    const currentPage = page;
-    const totalPages = Math.ceil(length / 6);
-    const pagesToShow = 5;
-    const pageItems = [];
+const Pagination = ({ page, length, sort, sortOrder, q }: IPaginationProps) => {
+  const submit = useSubmit();
+  const currentPage = page;
+  const totalPages = Math.ceil(length / 6);
+  const pagesToShow = 5;
+  const pageItems = [];
 
-    if (totalPages <= pagesToShow) {
-      for (let i = 1; i <= totalPages; i++) {
-        pageItems.push(i);
-      }
-    } else {
-      const startPage = Math.max(1, currentPage - 2);
-      const endPage = Math.min(totalPages, currentPage + 2);
+  if (totalPages <= pagesToShow) {
+    for (let i = 1; i <= totalPages; i++) {
+      pageItems.push(i);
+    }
+  } else {
+    const startPage = Math.max(1, currentPage - 2);
+    const endPage = Math.min(totalPages, currentPage + 2);
 
-      if (startPage > 1) {
-        pageItems.push(1, "...");
-      }
-
-      for (let i = startPage; i <= endPage; i++) {
-        pageItems.push(i);
-      }
-
-      if (endPage < totalPages) {
-        pageItems.push("...", totalPages);
-      }
+    if (startPage > 1) {
+      pageItems.push(1, "...");
     }
 
-    return (
-      <div className="flex justify-center my-4" role="pagination">
-        {pageItems.map((p, index) => (
-          <button
-            key={index}
-            className={`px-2 py-1 mx-1 rounded ${
-              p === currentPage ? "bg-gray-800 text-white" : "bg-gray-300"
-            }`}
-            ref={currentPage === p ? ref : null}
-            type="button"
-            id={`page-${p}`}
-            aria-label={`Page ${p}`}
-            name={`page`}
-            value={p}
-            onClick={() => submit({ page: p, sort, sortOrder, q }, )}
-            >
-            {p}
-          </button>
-        ))}
-      </div>
-    );
+    for (let i = startPage; i <= endPage; i++) {
+      pageItems.push(i);
+    }
+
+    if (endPage < totalPages) {
+      pageItems.push("...", totalPages);
+    }
   }
-);
+
+  return (
+    <div className="flex justify-center my-4" role="pagination">
+      {pageItems.map((p, index) => (
+        <button
+          key={index}
+          className={`px-2 py-1 mx-1 rounded ${
+            p === currentPage ? "bg-gray-800 text-white" : "bg-gray-300"
+          }`}
+          type="button"
+          id={`page-${p}`}
+          aria-label={`Page ${p}`}
+          name={`page`}
+          value={p}
+          onClick={() => submit({ page: p, sort, sortOrder, q })}
+        >
+          {p}
+        </button>
+      ))}
+    </div>
+  );
+};
 
 export const loader = async ({
   request,
@@ -132,16 +109,22 @@ export const loader = async ({
       response.json(),
       length.json(),
     ]);
-    return json({ data: jsonResponse, length: jsonLength, page, q, sortOrder, sort });
+    return json({
+      data: jsonResponse,
+      length: jsonLength,
+      page,
+      q,
+      sortOrder,
+      sort,
+    });
   } catch (error) {
     throw json({ error });
   }
 };
 
 export default function Index() {
-  const { data, length, page, q, sortOrder, sort } = useLoaderData<ILoaderData>();
-  const searchInputRef = useRef<HTMLInputElement>(null);
-  const paginationRef = useRef<HTMLButtonElement>(null);
+  const { data, length, page, q, sortOrder, sort } =
+    useLoaderData<ILoaderData>();
 
   const submit = useSubmit();
 
@@ -158,11 +141,12 @@ export default function Index() {
   return (
     <Form>
       <div className="bg-gray-900 text-white p-4 text-center">
-        <h1 className="text-2xl font-bold mb-4">My interview app :)</h1>
+        <h1 className="text-2xl font-bold mb-4">
+          <Link to="/">My interview app 📚</Link>
+        </h1>
         <div className="mb-4 flex flex-row">
           <div id="search" role="search" className="flex-grow">
             <input
-              ref={searchInputRef}
               id="q"
               aria-label="Search articles"
               placeholder="Search"
@@ -197,7 +181,13 @@ export default function Index() {
           </div>
         </div>
       </div>
-      <Pagination page={page} q={q} length={length} sort={sort} sortOrder={sortOrder} ref={paginationRef}  />
+      <Pagination
+        page={page}
+        q={q}
+        length={length}
+        sort={sort}
+        sortOrder={sortOrder}
+      />
     </Form>
   );
 }
