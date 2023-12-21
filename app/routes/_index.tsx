@@ -128,14 +128,9 @@ export default function Index() {
 
   const submit = useSubmit();
 
-  const handleSortByTitle = () => {
+  const handleSort = (sortKey: string) => {
     const newSortOrder = sortOrder === "desc" ? "asc" : "desc";
-    submit({ sort: "title", sortOrder: newSortOrder, page, q });
-  };
-
-  const handleSortByDate = () => {
-    const newSortOrder = sortOrder === "desc" ? "asc" : "desc";
-    submit({ sort: "publishedAt", sortOrder: newSortOrder, page, q });
+    submit({ sort: sortKey, sortOrder: newSortOrder, page, q });
   };
 
   return (
@@ -159,14 +154,18 @@ export default function Index() {
 
           <button
             type="button"
-            onClick={handleSortByTitle}
+            onClick={() => handleSort("title")}
             className="ml-2"
             name="sort"
           >
             Sort by title{" "}
             {sortOrder === "asc" ? <BiUpArrowAlt /> : <BiDownArrowAlt />}
           </button>
-          <button type="button" onClick={handleSortByDate} className="ml-2">
+          <button
+            type="button"
+            onClick={() => handleSort("publishedAt")}
+            className="ml-2"
+          >
             Sort by date{" "}
             {sortOrder === "asc" ? <BiUpArrowAlt /> : <BiDownArrowAlt />}
           </button>
